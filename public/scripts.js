@@ -5,6 +5,7 @@
   	Init 
   */
   App.init = function() {
+    console.log("ok")
     App.canvas = document.createElement('canvas');
     App.canvas.height = 400;
     App.canvas.width = 800;

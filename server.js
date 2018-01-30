@@ -1,14 +1,15 @@
-(function() {
-  var io;
-  io = require('socket.io').listen(4000);
-  io.sockets.on('connection', function(socket) {
-    socket.on('drawClick', function(data) {
-      console.log(data.canvas)
-      socket.broadcast.emit('draw', {
-        x: data.x,
-        y: data.y,
-        type: data.type
-      });
-    });
-  });
-}).call(this);
+
+const express = require('express')
+const app = express()
+const path = require('path')
+
+app.use('/public', express.static(__dirname + '/public'))
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/index.html'))
+})
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!')
+})
+
