@@ -45,12 +45,18 @@
     y = e.offsetY;
     App.draw(x, y, type);
     
+    App.socket.emit('drawClick', {
+      x: x,
+      y: y,
+      type: type
+    })
+
     if(type == 'dragend'){
       var canvas = document.getElementById('canvas');
       var dataURL = canvas.toDataURL();
       App.socket.emit('drawBase64', {
         dataURL: dataURL
-      });
+      })
     }
   });
   $(function() {
