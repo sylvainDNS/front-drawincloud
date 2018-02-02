@@ -5,33 +5,32 @@
   	Init 
   */
   App.init = function() {
-    console.log("ok")
-    App.canvas = document.createElement('canvas');
-    App.canvas.height = 400;
-    App.canvas.width = 800;
+    App.canvas = document.createElement('canvas')
+    App.canvas.height = 500
+    App.canvas.width = 900
     App.canvas.id = 'canvas'
-    document.getElementsByTagName('article')[0].appendChild(App.canvas);
-    App.ctx = App.canvas.getContext("2d");
-    App.ctx.fillStyle = "solid";
-    App.ctx.strokeStyle = "#ECD018";
-    App.ctx.lineWidth = 5;
-    App.ctx.lineCap = "round";
-    App.socket = io.connect('http://163.172.144.237:4444');
+    document.getElementsByTagName('article')[0].appendChild(App.canvas)
+    App.ctx = App.canvas.getContext("2d")
+    App.ctx.fillStyle = "solid"
+    App.ctx.strokeStyle = "#22F333"
+    App.ctx.lineWidth = 5
+    App.ctx.lineCap = "round"
+    App.socket = io.connect('http://163.172.144.237:4444')
     App.socket.on('draw', function(data) {
-      return App.draw(data.x, data.y, data.type);
+      return App.draw(data.x, data.y, data.type)
     });
     App.draw = function(x, y, type) {
       if (type === "dragstart") {
-        App.ctx.beginPath();
-        return App.ctx.moveTo(x, y);
+        App.ctx.beginPath()
+        return App.ctx.moveTo(x, y)
       } else if (type === "drag") {
-        App.ctx.lineTo(x, y);
-        return App.ctx.stroke();
+        App.ctx.lineTo(x, y)
+        return App.ctx.stroke()
       } else {
-        return App.ctx.closePath();
+        return App.ctx.closePath()
       }
-    };
-  };
+    }
+  }
   /*
   	Draw Events
   */
@@ -49,7 +48,8 @@
     App.socket.emit('drawClick', {
       x: x,
       y: y,
-      type: type
+      type: type,
+      color: App.ctx.strokeStyle
     })
 
     if(type == 'dragend'){
