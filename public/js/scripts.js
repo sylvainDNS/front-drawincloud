@@ -6,8 +6,8 @@
   */
   App.init = function() {
     App.canvas = document.createElement('canvas')
-    App.canvas.height = 500
-    App.canvas.width = 900
+    App.canvas.height = 520
+    App.canvas.width = 1000
     App.canvas.id = 'canvas'
     document.getElementsByTagName('article')[0].appendChild(App.canvas)
     App.ctx = App.canvas.getContext("2d")
@@ -15,7 +15,7 @@
     App.ctx.strokeStyle = "#22F333"
     App.ctx.lineWidth = 5
     App.ctx.lineCap = "round"
-    App.socket = io.connect('http://163.172.144.237:4444')
+    App.socket = io.connect(process.env.IP)
     App.socket.on('draw', function(data) {
       return App.draw(data.x, data.y, data.type)
     });
@@ -39,8 +39,9 @@
     var offset, type, x, y;
     type = e.handleObj.type;
     offset = $(this).offset();
-    e.offsetX = e.layerX - offset.left;
-    e.offsetY = e.layerY - offset.top;
+   
+    e.offsetX = e.layerX  - offset.left;
+    e.offsetY = e.layerY  - offset.top;
     x = e.offsetX;
     y = e.offsetY;
     App.draw(x, y, type);
@@ -56,7 +57,9 @@
       var canvas = document.getElementById('canvas');
       var dataURL = canvas.toDataURL();
       App.socket.emit('drawBase64', {
-        dataURL: dataURL
+        dataURL: dataURL,
+        user: 'yolo',
+        title: 'chef d\'oeuvre'
       })
     }
   });
