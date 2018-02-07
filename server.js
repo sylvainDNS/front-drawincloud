@@ -18,9 +18,7 @@ const checkError = (error, body) => {
 }
 
 app.get('/', (req, res) => {
-  console.log(process.env.IP)
   request(process.env.IP + '/snapshot', (error, response, body) => {
-    console.log('request', response.data)
     const data = checkError(error, body)
     res.render('index.html', {
       data: data

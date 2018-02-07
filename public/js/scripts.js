@@ -25,10 +25,10 @@
       return App.draw(data.x, data.y, data.type)
     });
     App.draw = function (x, y, type) {
-      if (type === "dragstart") {
+      if (type === "mousedown") {
         App.ctx.beginPath()
         return App.ctx.moveTo(x, y)
-      } else if (type === "drag") {
+      } else if (type === "mousemove") {
         App.ctx.lineTo(x, y)
         return App.ctx.stroke()
       } else {
@@ -42,27 +42,31 @@
   /*
   	Draw Events
   */
-  console.log($('#canvas'))
-  $('#canvas').live('drag dragstart dragend', function (e) {
-    console.log("yoyoy")
+  var dragging = false;
+  $('#canvas').on('mousemove mousedown mouseup', function (e) {
     var offset, type, x, y;
     type = e.handleObj.type;
     offset = $(this).offset();
+    if (type == "mousedown") {
+      dragging = true
+    } else if (type == "mouseup") {
+      dragging = false
+    }
+    e.offsetX = e.originalEvent.layerX - offset.left;
+    e.offsetY = e.originalEvent.layerY - offset.top;
+    x = e.originalEvent.offsetX;
+    y = e.originalEvent.offsetY;
+    if (dragging) {
+      App.draw(x, y, type);
+      App.socket.emit('drawClick', {
+        x: x,
+        y: y,
+        type: type,
+        color: App.ctx.strokeStyle
+      })
+    }
 
-    e.offsetX = e.layerX - offset.left;
-    e.offsetY = e.layerY - offset.top;
-    x = e.offsetX;
-    y = e.offsetY;
-    App.draw(x, y, type);
-
-    App.socket.emit('drawClick', {
-      x: x,
-      y: y,
-      type: type,
-      color: App.ctx.strokeStyle
-    })
-
-    if (type == 'dragend') {
+    if (type == 'mouseup') {
       var canvas = $('#canvas').get(0);
       var dataURL = canvas.toDataURL();
       var title = $('#title').val()
