@@ -1,10 +1,15 @@
-(function() {
+(function () {
   var App;
   App = {};
+  const process = {
+    env: {
+      IP: '127.0.0.1:4444'
+    }
+  }
   /*
   	Init 
   */
-  App.init = function() {
+  App.init = function () {
     App.canvas = document.createElement('canvas')
     App.canvas.height = 520
     App.canvas.width = 1000
@@ -16,10 +21,10 @@
     App.ctx.lineWidth = 5
     App.ctx.lineCap = "round"
     App.socket = io.connect(process.env.IP)
-    App.socket.on('draw', function(data) {
+    App.socket.on('draw', function (data) {
       return App.draw(data.x, data.y, data.type)
     });
-    App.draw = function(x, y, type) {
+    App.draw = function (x, y, type) {
       if (type === "dragstart") {
         App.ctx.beginPath()
         return App.ctx.moveTo(x, y)
@@ -31,21 +36,25 @@
       }
     }
   }
+
+  App.init();
+
   /*
   	Draw Events
   */
-  $('canvas').live('drag dragstart dragend', function(e) {
-    
+  console.log($('#canvas'))
+  $('#canvas').live('drag dragstart dragend', function (e) {
+    console.log("yoyoy")
     var offset, type, x, y;
     type = e.handleObj.type;
     offset = $(this).offset();
-   
-    e.offsetX = e.layerX  - offset.left;
-    e.offsetY = e.layerY  - offset.top;
+
+    e.offsetX = e.layerX - offset.left;
+    e.offsetY = e.layerY - offset.top;
     x = e.offsetX;
     y = e.offsetY;
     App.draw(x, y, type);
-    
+
     App.socket.emit('drawClick', {
       x: x,
       y: y,
@@ -53,17 +62,16 @@
       color: App.ctx.strokeStyle
     })
 
-    if(type == 'dragend'){
-      var canvas = document.getElementById('canvas');
+    if (type == 'dragend') {
+      var canvas = $('#canvas').get(0);
       var dataURL = canvas.toDataURL();
+      var title = $('#title').val()
       App.socket.emit('drawBase64', {
         dataURL: dataURL,
         user: 'yolo',
-        title: 'chef d\'oeuvre'
+        title: title
       })
     }
   });
-  $(function() {
-    return App.init();
-  });
+
 }).call(this);
