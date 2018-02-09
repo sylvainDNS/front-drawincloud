@@ -3,13 +3,20 @@
   App = {};
   const process = {
     env: {
-      IP: 'localhost:4444'
+      IP: '127.0.0.1:4444'
     }
   }
   /*
   	Init 
   */
   App.init = function () {
+    $('#colorpicker').colorpicker({
+      color: '#ffaa00',
+      container: true,
+      inline: true
+    }).on('colorpickerChange colorpickerCreate', (e) => {
+      App.ctx.strokeStyle = e.color.toRgbString()
+    })
     App.canvas = document.createElement('canvas')
     App.canvas.height = 520
     App.canvas.width = 1000
@@ -17,23 +24,28 @@
     document.getElementsByTagName('article')[0].appendChild(App.canvas)
     App.ctx = App.canvas.getContext("2d")
     App.ctx.fillStyle = "solid"
-    App.ctx.strokeStyle = "#22F333"
     App.ctx.lineWidth = 5
     App.ctx.lineCap = "round"
     App.socket = io.connect(process.env.IP)
     App.socket.on('draw', function (data) {
-      return App.draw(data.x, data.y, data.type)
+      App.draw(data.x, data.y, data.type, data.color)
     });
-    App.draw = function (x, y, type) {
+    App.draw = function (x, y, type, color) {
+      const tempColor = App.ctx.strokeStyle
+      if (color != null)
+        App.ctx.strokeStyle = color
+
       if (type === "mousedown") {
         App.ctx.beginPath()
-        return App.ctx.moveTo(x, y)
+        App.ctx.moveTo(x, y)
       } else if (type === "mousemove") {
         App.ctx.lineTo(x, y)
-        return App.ctx.stroke()
+        App.ctx.stroke()
       } else {
-        return App.ctx.closePath()
+        App.ctx.closePath()
       }
+
+      App.ctx.strokeStyle = tempColor
     }
 
     App.loadSnapshot = (snapshotId) => {
@@ -78,9 +90,9 @@
     }
 
     if (type == 'mouseup') {
-      var canvas = $('#canvas').get(0);
-      var dataURL = canvas.toDataURL();
-      var title = $('#title').val()
+      const canvas = $('#canvas').get(0);
+      const dataURL = canvas.toDataURL();
+      const title = $('#title').val()
       App.socket.emit('drawBase64', {
         dataURL: dataURL,
         user: 'yolo',

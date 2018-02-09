@@ -64,3 +64,7 @@ input[type="text"]{font: 15px/24px "Lato", Arial, sans-serif; color: #333; width
 
 .effect-1 ~ .focus-border{position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: #4caf50; transition: 0.4s;}
 .effect-1:focus ~ .focus-border{width: 100%; transition: 0.4s;}
+
+.inl-bl {
+	display: inline-block;
+}

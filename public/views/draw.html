@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="public/css/bootstrap.css" />
 	<link rel="stylesheet" href="public/css/bootstrap-grid.css" />
+	<link rel="stylesheet" href="public/css/bootstrap-colorpicker.min.css" />
 	<link rel="stylesheet" href="public/css/style.css" />
 	<title>DrawInCloud</title>
 </head>
@@ -14,17 +15,23 @@
 	<div class="container">
 		<div class="col-6">
 			<input id="title" class="effect-1" type="text" placeholder="Title">
+
+			<div class="container">
+				<div id="colorpicker" class="inl-bl"></div>
+			</div>
+
 			<div class="row bg_2">
 				<article>
 					<!-- our canvas will be inserted here-->
 				</article>
 			</div>
 
-			<script type="text/javascript" src="public/js/jquery-3.3.1.min.js"></script>
+			<script src="public/js/jquery-3.3.1.min.js"></script>
 			<script src="http://127.0.0.1:4444/socket.io/socket.io.js"></script>
 
 			<script src="public/js/popper.min.js"></script>
 			<script src="public/js/bootstrap.min.js"></script>
+			<script src="public/js/bootstrap-colorpicker.min.js"></script>
 
-			<script type="text/javascript" src="public/js/scripts.js"></script>
+			<script src="public/js/scripts.js"></script>
 </body>
