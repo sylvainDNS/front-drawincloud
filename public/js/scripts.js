@@ -1,9 +1,9 @@
 (function () {
-  var App;
+  let App;
   App = {};
   const process = {
     env: {
-      IP: '127.0.0.1:4444'
+      IP: 'localhost:4444'
     }
   }
   /*
@@ -35,6 +35,17 @@
         return App.ctx.closePath()
       }
     }
+
+    App.loadSnapshot = (snapshotId) => {
+      const req = 'http://' + process.env.IP + '/snapshot/' + snapshotId
+      $.getJSON(req, (res) => {
+        const image = new Image()
+        image.onload = () => {
+          App.ctx.drawImage(image, 0, 0)
+        }
+        image.src = res.dataURL
+      });
+    }
   }
 
   App.init();
@@ -42,9 +53,9 @@
   /*
   	Draw Events
   */
-  var dragging = false;
+  let dragging = false;
   $('#canvas').on('mousemove mousedown mouseup', function (e) {
-    var offset, type, x, y;
+    let offset, type, x, y;
     type = e.handleObj.type;
     offset = $(this).offset();
     if (type == "mousedown") {
