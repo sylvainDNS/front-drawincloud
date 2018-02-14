@@ -73,3 +73,14 @@ input[type="text"]{font: 15px/24px "Lato", Arial, sans-serif; color: #333; width
 	height:100%;
     width:100%;
 }
+
+.col-md-4 {
+	border-color: #333;
+}
+.col-md-4 p {
+	background-color: white;
+}
+.col-md-4 p img {
+	background-color: white;
+	max-width: 100%;
+}
