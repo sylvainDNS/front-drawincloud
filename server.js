@@ -10,6 +10,12 @@ app.set('views', __dirname + '/public/views')
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html')
 
+const process = {
+  env: {
+    IP: 'http://127.0.0.1:4444'
+  }
+}
+
 const checkError = (error, body) => {
   if (error)
     return error
@@ -20,8 +26,10 @@ const checkError = (error, body) => {
 app.get('/', (req, res) => {
   request.get(process.env.IP + '/snapshot', (error, response, body) => {
     if (error) {
+      console.log(error)
       res.send(error.code)
     } else {
+      console.log("index")
       res.render('index.html', {
         data: body
       })
@@ -35,11 +43,12 @@ app.get('/draw', (req, res) => {
 
 app.get('/draw/:id', (req, res) => {
   const id = req.params.id
-  request.get(process.env.IP + '/snapshot/' + id, (error, response, body) => {
+  request.get(process.env.IP + '/snapshot/:' + id, (error, response, body) => {
     if (error) {
       res.send(error.code)
     } else {
       const data = JSON.parse(body)
+      console.log(data.dataURL)
       res.render('draw.html', {
         dataURL: data.dataURL,
         title: data.title
